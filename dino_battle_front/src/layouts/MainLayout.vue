@@ -18,7 +18,38 @@
         <q-btn-group push>
           <q-btn color="green-8" push label="new game" icon="add_circle" @click="new_game"/>
           <q-btn color="red-7" push label="reset" icon="replay" @click="new_game"/>
+
         </q-btn-group>
+
+      </div>
+      <div class="q-px-xs q-pb-md">
+        <q-timeline :layout="layout" color="secondary">
+          <q-timeline-entry heading>
+            how to play
+          </q-timeline-entry>
+
+          <q-timeline-entry
+            subtitle="insert"
+            side="left"
+          >
+            <div>
+              for insert new creature
+              <br>
+              you can <u>right_click</u> on empty cells
+            </div>
+          </q-timeline-entry>
+
+          <q-timeline-entry
+            subtitle="action"
+            side="left"
+          >
+            <div>
+              for doing an action [move, attack]
+              <br>
+              you can click on dinosaur cells
+            </div>
+          </q-timeline-entry>
+        </q-timeline>
       </div>
     </q-page-sticky>
     <template v-if="land_grid_objects.length<1">
@@ -116,14 +147,12 @@ export default defineComponent({
         .catch((e) => {
           this.$q.notify({
             progress: true,
-            message: "server failure! please try again later",
+            message: e.response.data.message,
             icon: "report_problem",
             color: "negative",
             textColor: "white",
           });
-          this.submitting = false;
 
-          console.log(e);
         });
     },
     attack(x, y) {
@@ -134,7 +163,7 @@ export default defineComponent({
         }).catch((e) => {
         this.$q.notify({
           progress: true,
-          message: "server failure! please try again later",
+          message: e.response.data.message,
           icon: "report_problem",
           color: "negative",
           textColor: "white",
@@ -158,9 +187,6 @@ export default defineComponent({
             color: "negative",
             textColor: "white",
           });
-          this.submitting = false;
-
-          console.log(e);
         });
     },
     create_land() {
@@ -177,9 +203,6 @@ export default defineComponent({
             color: "negative",
             textColor: "white",
           });
-          this.submitting = false;
-
-          console.log(e);
         });
     },
     new_game() {
@@ -196,9 +219,6 @@ export default defineComponent({
             color: "negative",
             textColor: "white",
           });
-          this.submitting = false;
-
-          console.log(e);
         });
     },
     get_land_content(position) {
@@ -229,7 +249,6 @@ export default defineComponent({
             textColor: "white",
           });
 
-          console.log(e);
         });
       this.show_menu = true;
     }

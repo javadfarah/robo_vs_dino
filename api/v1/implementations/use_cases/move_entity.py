@@ -14,6 +14,7 @@ async def move_entity_use_case(move):
     y = move.y
     direction = move.direction
     origin_entity = LandRepository.get_data_by_id(f"{x}:{y}")
+    # make sure we are moving robots
     if origin_entity.content != "robo":
         raise UnicornException(message='you cant move anything but robots', status_code=status.HTTP_400_BAD_REQUEST)
 
@@ -26,7 +27,7 @@ async def move_entity_use_case(move):
             x -= 1
         case 'down':
             x += 1
-    print(x, y)
+    # make sure the next position is not out of the box
     if settings.GRID_SIZE < y or y < 1 or settings.GRID_SIZE < x or x < 1:
         raise UnicornException(status_code=status.HTTP_400_BAD_REQUEST, message='you can not move out of the box')
     destination_entity = LandRepository.get_data_by_id(f"{x}:{y}")

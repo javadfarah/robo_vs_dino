@@ -5,6 +5,7 @@ from utils import UnicornException, unicorn_exception_handler
 
 app = FastAPI()
 app.add_exception_handler(UnicornException, unicorn_exception_handler)
+# in case of changing the front-end port or domain you have to modify the origins
 origins = [
     "http://localhost",
     "http://localhost:9000",
@@ -19,5 +20,5 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+# adding apps
 app.include_router(api_router)

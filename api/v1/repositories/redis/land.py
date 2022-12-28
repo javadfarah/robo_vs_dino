@@ -9,15 +9,15 @@ from redis_om import Migrator
 
 class LandRepository:
 
-    @staticmethod
-    def get_data_by_id(position_id: str):
+    @classmethod
+    def get_data_by_id(cls, position_id: str):
         try:
             return LandField.find(LandField.id == position_id).first()
         except redis_om.NotFoundError:
             raise UnicornException(status_code=status.HTTP_404_NOT_FOUND, message="not found")
 
-    @staticmethod
-    def get_all_data(schema):
+    @classmethod
+    def get_all_data(cls, schema):
         all_data = schema.all_pks()
         result = []
         for data in all_data:
@@ -25,8 +25,8 @@ class LandRepository:
             result.append(_['pk'])
         return result
 
-    @staticmethod
-    def create_battle_land(grid_size):
+    @classmethod
+    def create_battle_land(cls, grid_size):
         for x in range(1, grid_size + 1):
             for y in range(1, grid_size + 1):
                 schema = LandField(x=x, y=y, id=f"{x}:{y}")
@@ -37,6 +37,7 @@ class LandRepository:
     def get_land(cls):
         all_data = LandField.all_pks()
         result = []
+        # get all data from redis and remove pk from them
         for data in all_data:
             _ = LandField.get(data).dict()
             del _["pk"]
@@ -60,7 +61,6 @@ class LandRepository:
     def set_data_by_id(cls, position_id: str, options: dict):
         entity = cls.get_data_by_id(position_id)
         for key, val in options.items():
-            print(key)
             if hasattr(entity, key):
                 setattr(entity, key, val)
         entity.save()

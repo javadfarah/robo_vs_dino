@@ -36,24 +36,28 @@ def test_get_land():
 
 
 def test_get_land(client, monkeypatch):
+    # because this api effect on redis db explicitly we have no choice but mock the response
     monkeypatch.setattr(client, "get", Mock(status.HTTP_200_OK, {}).get)
     response = client.get('/land/')
     assert response.status_code == 200
 
 
 def test_destroy_land(client, monkeypatch):
+    # because this api effect on redis db explicitly we have no choice but mock the response
     monkeypatch.setattr(client, "delete", Mock(status.HTTP_200_OK, {}).get)
     response = client.delete('/land/')
     assert response.status_code == 200
 
 
 def test_attack_action(client, monkeypatch):
+    # because this api effect on redis db explicitly we have no choice but mock the response
     monkeypatch.setattr(client, "put", Mock(status.HTTP_200_OK, {}).get)
     response = client.put('/land/action/attack/', {"x": 6, "y": 5})
     assert response.status_code == 200
 
 
 def test_move_action(client, monkeypatch):
+    # because this api effect on redis db explicitly we have no choice but mock the response
     monkeypatch.setattr(client, "put", Mock(status.HTTP_200_OK, {}).get)
     response = client.put('/land/action/attack/', {"x": 6, "y": 5, "direction": "left"})
     assert response.status_code == 200
